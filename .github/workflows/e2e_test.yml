@@ -40,11 +40,10 @@ jobs:
               ...context.repo,
               tag_name: "double",
             })
-          
           } catch (e) {
             console.log(e)
             console.log(e.response.data.errors)
-            assert.deepStrictEqual(e.response.data.errors[0] == "already_exists)
+            assert.deepStrictEqual(e.response.data.errors[0] == "already_exists")
           }
 
 
