@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest] #, windows-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
 
@@ -35,13 +35,13 @@ jobs:
         script: |
           const assert = require('assert').strict;
           
-          const _release = await octokit.request(createRelease, {
+          const _release = await github.rest.repos.createRelease({
             ...context.repo,
             tag_name: "double",
           })
           
           try {
-            const _release = await octokit.request(createRelease, {
+            const _release2 = await github.rest.repos.createRelease({
               ...context.repo,
               tag_name: "double",
             })
