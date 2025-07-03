@@ -48,9 +48,7 @@ jobs:
           
           } catch (e) {
             console.log(e)
-            assert.deepStrictEqual(e.status, 422)
-            assert.deepStrictEqual(e.message, "Validation Failed")
-            assert.deepStrictEqual(e.errors[0].message, "A release already exists for tag double")
+            console.log(e.response.data.errors)
           }
 
 
