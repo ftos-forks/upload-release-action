@@ -43,7 +43,8 @@ jobs:
           } catch (e) {
             console.log(e)
             console.log(e.response.data.errors)
-            assert.deepStrictEqual(e.response.data.errors[0] == "already_exists")
+            console.log(e.response.data.errors[0].code)
+            assert.deepStrictEqual(e.response.data.errors[0].code, "already_exists")
           }
 
 
