@@ -263,6 +263,36 @@ function repo(): {owner: string; repo: string} {
   }
 }
 
+async function verify_and_fix_draft_status(
+  release_id: number,
+  expected_draft: boolean,
+  octokit: Octokit,
+  tag: string
+): Promise<void> {
+  try {
+    const current_release = await octokit.request(releaseByID, {
+      ...repo(),
+      release_id: release_id
+    })
+
+    if (current_release.data.draft !== expected_draft) {
+      core.info(
+        `Release ${tag} has draft=${current_release.data.draft} but expected draft=${expected_draft}. Updating...`
+      )
+      await octokit.request(updateRelease, {
+        ...repo(),
+        release_id: release_id,
+        draft: expected_draft
+      })
+      core.info(`Updated release ${tag} draft status to ${expected_draft}`)
+    }
+  } catch (error: any) {
+    core.warning(
+      `Failed to verify/fix draft status for release ${tag}: ${error.message}`
+    )
+  }
+}
+
 async function run(): Promise<void> {
   try {
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
@@ -347,6 +377,9 @@ async function run(): Promise<void> {
       )
       core.setOutput('browser_download_url', asset_download_url)
     }
+
+    // After uploads are complete, verify and fix draft status if needed - see https://github.com/svenstaro/upload-release-action/issues/99
+    await verify_and_fix_draft_status(release.data.id, draft, octokit, tag)
   } catch (error: any) {
     core.setFailed(error.message)
   }
