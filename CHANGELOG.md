@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.11.3] - 2025-11-20
+- Post-fix releases created as draft when they shouldn't have - [#99](https://github.com/svenstaro/upload-release-action/pull/99)
+
 ## [2.11.2] - 2025-07-06
 - Solved race-condition when matrix builds try to create the same release at the same time - [#147](https://github.com/svenstaro/upload-release-action/pull/147)
 
